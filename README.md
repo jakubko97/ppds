@@ -2,10 +2,11 @@
 Prednášajúci:
 
 - [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/matus-jokay/).
+
 Cvičiaci:
 
 - [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/matus-jokay/).
-- [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/roderik-ploszek/).
+- [Roderik Ploszek](https://uim.fei.stuba.sk/pracovnici/roderik-ploszek/).
 
 Cvičenie utorok o 13.00
 
