@@ -1,7 +1,9 @@
 # Paralelné programovanie a distribuované systémy
-## Prednášajúci [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/matus-jokay/).
-## Cvičiaci [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/matus-jokay/).
-## [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/roderik-ploszek/).
+- Prednášajúci 
+[Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/matus-jokay/).
+- Cvičiaci 
+[Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/matus-jokay/).
+- [Matúš Jókay](https://uim.fei.stuba.sk/pracovnici/roderik-ploszek/).
 Cvičenie utorok o 13.00
 
 1. cvičenie [Oboznámenie sa s prostredím](https://uim.fei.stuba.sk/i-ppds/1-cvicenie-oboznamenie-sa-s-prostredim-%f0%9f%90%8d/).
