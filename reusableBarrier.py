@@ -72,8 +72,6 @@ def barrier_example(barrier,thread_name):
 # synchronizovat.
 
 thread_num = 5
-sb1 = SimpleBarrier(thread_num)
-sb2 = SimpleBarrier(thread_num)
 barrier = Barrier(thread_num)
 for i in range(thread_num):
     thread = Thread(barrier_example, barrier, i)

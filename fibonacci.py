@@ -2,25 +2,29 @@ from time import sleep
 from random import randint
 from fei.ppds import Thread, Mutex, Semaphore, print
 
-class SimpleBarrier():
-    def __init__(self, N):
+class Fibonacci():
+    def __init__(self, shared, N):
         self.N = N
         self.counter = 0
-        self.mutex = Mutex()
+        self.shared = shared
         self.turnstile = Semaphore(0)
 
-    def wait(self, shared):
-        if self.counter == self.N:
-            for _ in range(self.N):
-                self.turnstile.signal()
-                return
+    def wait(self):
+        self.shared.mutex.lock()
 
-        self.mutex.lock()
+        if self.shared.i+2 == self.shared.end:
+            return
+
         self.counter+=1
-        shared.array.append(shared.array[shared.i] + shared.array[shared.i+1])
-        print('i : {%d} ' % shared.array[shared.i])
-        shared.i+=1
-        self.mutex.unlock()
+        if self.counter == self.N:
+           self.counter = 0
+           for _ in range(self.N):
+               self.turnstile.signal()
+
+        self.shared.array.append(self.shared.array[self.shared.i] + self.shared.array[self.shared.i+1])
+        # print('i : {%d} ' % self.shared.i)
+        self.shared.i+=1
+        self.shared.mutex.unlock()
         self.turnstile.wait()
 
 class Shared():
@@ -41,19 +45,19 @@ def ko(thread_name):
     sleep(randint(1,10)/10)
 
 
-def barrier_example(barrier, shared, thread_name):
-
-    for _ in range(shared.end):
+def barrier_example(barrier, thread_name):
         # ...
-        rendezvous(thread_name)
-        barrier.wait(shared)
-        ko(thread_name)
+    while True:
+        # rendezvous(thread_name)
+        barrier.wait()
         # ...
 
 thread_num = 8
-barrier = SimpleBarrier(thread_num)
-
-sh = Shared(10)
+shared = Shared(8)
+barrier = Fibonacci(shared, thread_num)
 for i in range(thread_num):
-    thread = Thread(barrier_example, barrier, sh, i)
+    thread = Thread(barrier_example, barrier, i)
+
+for j in shared.array:
+    print('%d ' % j)
 
