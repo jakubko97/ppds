@@ -19,26 +19,35 @@ class SimpleBarrier():
         self.mutex.lock()
         self.counter +=1
         if self.counter == self.N:
-           self.turnstile1.signal()
+           self.counter = 0
+           for _ in range(self.N):
+               self.turnstile1.signal()
         self.mutex.unlock()
         self.turnstile1.wait()
-        self.turnstile2.signal()
 
-        self.mutex.lock()
-        self.counter -= 1
-        if self.counter == 0:
-           self.turnstile2.signal()
-           self.turnstile1.wait()
-        self.mutex.unlock()
-        self.turnstile2.wait()
-        self.turnstile1.signal()
+        # self.mutex.lock()
+        # self.counter -= 1
+        # if self.counter == 0:
+        #    self.turnstile2.signal()
+        #    self.turnstile1.wait()
+        # self.mutex.unlock()
+        # self.turnstile2.wait()
+        # self.turnstile1.signal()
 
+class Barrier:
+     def __init__(self, N):
+        self.sb1 = SimpleBarrier(N)
+        self.sb2 = SimpleBarrier(N)
 
-def rendezvous(thread_name, i):
+     def wait(self):
+        self.sb1.wait()
+        self.sb2.wait()
+
+def rendezvous(thread_name):
     sleep(randint(1,10)/10)
     print('vlakno: {%d} pred barierou' % thread_name)
 
-def ko(thread_name, i):
+def ko(thread_name):
     print('vlakno: {%d} po bariere' % thread_name)
     sleep(randint(1,10)/10)
 
@@ -63,6 +72,8 @@ def barrier_example(barrier,thread_name):
 # synchronizovat.
 
 thread_num = 5
-sb = SimpleBarrier(thread_num)
+sb1 = SimpleBarrier(thread_num)
+sb2 = SimpleBarrier(thread_num)
+barrier = Barrier(thread_num)
 for i in range(thread_num):
-    thread = Thread(barrier_example, sb, i)
+    thread = Thread(barrier_example, barrier, i)
