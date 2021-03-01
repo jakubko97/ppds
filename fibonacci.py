@@ -1,31 +1,31 @@
 from time import sleep
 from random import randint
-from fei.ppds import Thread, Mutex, Semaphore, print
+from fei.ppds import Thread, Mutex, Semaphore, print, Event
 
 class Fibonacci():
     def __init__(self, shared, N):
         self.N = N
         self.counter = 0
         self.shared = shared
-        self.turnstile = Semaphore(0)
+        self.mutex = Mutex()
+        self.e = Event()
 
     def wait(self):
-        self.shared.mutex.lock()
-
         if self.shared.i+2 == self.shared.end:
+            self.e.wait()
             return
-
+        self.shared.mutex.lock()
         self.counter+=1
         if self.counter == self.N:
            self.counter = 0
            for _ in range(self.N):
-               self.turnstile.signal()
+               self.e.signal()
 
         self.shared.array.append(self.shared.array[self.shared.i] + self.shared.array[self.shared.i+1])
-        # print('i : {%d} ' % self.shared.i)
+        # print('%d ' % self.shared.array[self.shared.i])
         self.shared.i+=1
         self.shared.mutex.unlock()
-        self.turnstile.wait()
+        self.e.wait()
 
 class Shared():
     def __init__(self, end):
@@ -52,8 +52,8 @@ def barrier_example(barrier, thread_name):
         barrier.wait()
         # ...
 
-thread_num = 8
-shared = Shared(8)
+thread_num = 2
+shared = Shared(10)
 barrier = Fibonacci(shared, thread_num)
 for i in range(thread_num):
     thread = Thread(barrier_example, barrier, i)
