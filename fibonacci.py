@@ -7,7 +7,6 @@ class Fibonacci():
         self.N = N
         self.counter = 0
         self.shared = shared
-        self.mutex = Mutex()
         self.e = Event()
 
     def wait(self):
@@ -16,6 +15,7 @@ class Fibonacci():
             return
         self.shared.mutex.lock()
         self.counter+=1
+        # posledné vlákno by malo uvolnit barieru
         if self.counter == self.N:
            self.counter = 0
            for _ in range(self.N):
@@ -35,6 +35,7 @@ class Shared():
         self.array.append(0)
         self.array.append(1)
         self.mutex = Mutex()
+        # nastavil som sem mutex, aby dane vlakna nepristupili k zdielanemu indexu a polu
 
 def rendezvous(thread_name):
     sleep(randint(1,10)/10)
@@ -46,18 +47,19 @@ def ko(thread_name):
 
 
 def barrier_example(barrier, thread_name):
-        # ...
+        # ... rendezvous som zakomentoval, lebo sa to chová divne, cyklicky a neviem to opraviť
     while True:
         # rendezvous(thread_name)
         barrier.wait()
         # ...
 
 thread_num = 2
-shared = Shared(10)
+shared = Shared(10) # vstup je velkost pola resp. počet, kolko čísel chcem vypísať vo Fibonacciho postupnosti
 barrier = Fibonacci(shared, thread_num)
 for i in range(thread_num):
     thread = Thread(barrier_example, barrier, i)
 
+# ... konečný výpis zdielaneho pola array
 for j in shared.array:
     print('%d ' % j)
 
