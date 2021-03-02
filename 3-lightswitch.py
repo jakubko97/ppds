@@ -1,4 +1,6 @@
-from fei.ppds import Mutex
+from time import sleep
+from random import randint
+from fei.ppds import Thread, Mutex, Semaphore, print, Event
 # seminar ppds 2/03/2021
 
 class LightSwitch(object):
@@ -21,6 +23,15 @@ class LightSwitch(object):
         if self.cnt == 0:
             semaphore.signal()
         self.mutex.unlock()
+
+class Shared(object):
+    def __init__(self, N):
+        self.N = N
+        self.cnt = 0
+        self.mutex = Mutex()
+        self.items = [0] * N
+        self.free = self.items
+        self.sem = Semaphore(0)
 
 def producent (shared):
     # pristup k zdielanym premennym
@@ -48,3 +59,19 @@ def consumer (shared):
     shared.mutex.unlock()
     # spracovanie vyrobku, simulacia
     sleep(randint(0, 10) / 10)
+
+def stack_example(ls, shared, thread_index):
+
+    while True:
+        ls.lock(shared.sem)
+        print('%d ' % ls.cnt)
+        producent(shared)
+        consumer(shared)
+        ls.unlock(shared.sem)
+
+thread_num = 5
+shared = Shared(10)
+ls = LightSwitch()
+
+for x in range(thread_num):
+    thread = Thread(sklad_example,ls, shared, x)
