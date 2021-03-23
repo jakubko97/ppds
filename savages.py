@@ -87,13 +87,12 @@ def savage(savage_id, shared):
               (savage_id, shared.servings))
         if shared.servings == 0:
             print("divoch %2d: budim kuchara" % savage_id)
-            shared.empty_pot.signal()
+            shared.empty_pot.signal(C)
             shared.full_pot.wait()
         get_serving_from_pot(savage_id, shared)
         shared.mutex.unlock()
 
         eat(savage_id)
-
 
 def put_servings_in_pot(cook_id, shared):
 
@@ -101,7 +100,6 @@ def put_servings_in_pot(cook_id, shared):
     # navarenie jedla tiez cosi trva...
     sleep(0.4 + randint(0, 2) / 10)
     shared.servings += P
-
 
 def cook(cook_id, M, shared):
 
