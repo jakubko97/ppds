@@ -3,13 +3,13 @@ from numba import cuda
 import numpy
 import math
 
-
 @cuda.jit
 def my_kernel_2D(io_array):
     x, y = cuda.grid(2)
-    ### YOUR SOLUTION HERE
+    if x < io_array.shape[0] and y < io_array.shape[1]:
+        io_array[x][y] *= 2
 
-
+#16cols 16rows
 data = numpy.ones((16, 16))
 threadsperblock = (16, 16)
 blockspergrid_x = math.ceil(data.shape[0] / threadsperblock[0])
